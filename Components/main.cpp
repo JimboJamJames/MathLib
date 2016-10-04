@@ -5,42 +5,28 @@
 
 void main()
 {
-	sfw::initContext();
-	Transform trans(400, 300, 30, 30, 23);
-
-
-	// Various Syntax for calling constructors
-	int j = int(4);
-	int k(4);      // works in c-tor
-	int l = { 4 };
-	int n{ 4 };     // works in c-tor
-
-	Transform tl = Transform(400, 300);
-	Transform tn = { 400, 300 };
-	Transform tm(400, 300);
-	Transform tq{ 400,300 };
-
-	//trans.position = vec2{400,300};
-	trans.facing = deg2rad(45);
-	trans.scale = vec2{ 24,8 };
-
-	vec2 basis = { 40,0 };
-	float ang_vec = 0;
-
+	float W = 1200, H = 1200;
+	sfw::initContext(W, H);
+	float steps = 100;
 	while (sfw::stepContext())
 	{
-		ang_vec += sfw::getDeltaTime();
-		vec2 incident = fromAngle(ang_vec) * 40;
-		float proj = dot(basis, normal(incident));
+		// i is the number lines we draw.
+		for (int i = 0; i < steps; ++i)
+		{
+			float x1 = i / steps;// 0-1 range.
+								 // i+1 is the next point!
+			float x2 = (i + 1) / steps;
+			// call the function for both points.
+			float y1 = quadBezier(.5f, 0, 1, x1);
+			float y2 = quadBezier(.5f, 0, 1, x2);
 
-		// Draw the data in diff colors.
-		sfw::drawLine(400, 300, 400 + basis.x, 300 + basis.y, RED);
-		sfw::drawLine(400, 300, 400 + incident.x, 300 + incident.y, CYAN);
-		sfw::drawLine(400, 300, 400 + proj, 300, GREEN);
-		//sfw::drawLine();
+			x1 *= W;
+			y1 *= H;
+			x2 *= W;
+			y2 *= H;
 
-		//trans.debugDraw();
+			sfw::drawLine(x1, y1, x2, y2);
+		}
 	}
-
 	sfw::termContext();
 }

@@ -2,6 +2,7 @@
 #include "sfwdraw.h"
 
 
+
 Transform::Transform(float x, float y,
 	float w, float h, float a)
 	: position{ x,y },
